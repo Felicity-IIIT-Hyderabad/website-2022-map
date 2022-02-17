@@ -8,8 +8,21 @@ import mainMap from './assets/tuxemon-town.json';
 import mainTileset from './assets/tuxmon-sample-32px-extruded.png';
 import App from './components/App.jsx';
 
-let cursors;
-let player;
+var cursors;
+var player;
+
+// canvas dimensions
+var canvasMargin = 80;
+var canvasWidth = window.innerWidth * window.devicePixelRatio - canvasMargin;
+var canvasHeight = window.innerHeight * window.devicePixelRatio - canvasMargin;
+
+// map dimensions
+var mapHeight = mainMap.height * mainMap.tilewidth;
+var mapWidth = mainMap.width * mainMap.tilewidth;
+
+// dynamically adjust canvas dimensions
+canvasWidth = canvasWidth > mapWidth ? mapWidth : canvasWidth;
+canvasHeight = canvasHeight > mapHeight ? mapHeight : canvasHeight;
 
 class IIITCampus extends Phaser.Scene {
     // constructor {{{
@@ -58,7 +71,7 @@ class IIITCampus extends Phaser.Scene {
         // Create a sprite with physics enabled via the physics system. The image used for the
         // sprite has a bit of whitespace, so I'm using setSize & setOffset to control the size of
         // the player's body.
-        player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'atlas', 'misa-front')
+        player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'atlas', 'player-front')
                      .setSize(30, 40)
                      .setOffset(0, 24);
 
@@ -69,9 +82,9 @@ class IIITCampus extends Phaser.Scene {
         // global animation manager so any sprite can access them.
         const anims = this.anims;
         anims.create({
-            key: 'misa-left-walk',
+            key: 'player-left-walk',
             frames: anims.generateFrameNames('atlas', {
-                prefix: 'misa-left-walk.',
+                prefix: 'player-left-walk.',
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -80,9 +93,9 @@ class IIITCampus extends Phaser.Scene {
             repeat: -1,
         });
         anims.create({
-            key: 'misa-right-walk',
+            key: 'player-right-walk',
             frames: anims.generateFrameNames('atlas', {
-                prefix: 'misa-right-walk.',
+                prefix: 'player-right-walk.',
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -91,9 +104,9 @@ class IIITCampus extends Phaser.Scene {
             repeat: -1,
         });
         anims.create({
-            key: 'misa-front-walk',
+            key: 'player-front-walk',
             frames: anims.generateFrameNames('atlas', {
-                prefix: 'misa-front-walk.',
+                prefix: 'player-front-walk.',
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -102,9 +115,9 @@ class IIITCampus extends Phaser.Scene {
             repeat: -1,
         });
         anims.create({
-            key: 'misa-back-walk',
+            key: 'player-back-walk',
             frames: anims.generateFrameNames('atlas', {
-                prefix: 'misa-back-walk.',
+                prefix: 'player-back-walk.',
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -121,7 +134,7 @@ class IIITCampus extends Phaser.Scene {
 
         // Help text that has a "fixed" position on the screen
         this.add
-            .text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
+            .text(16, 16, 'Arrow keys to move\n"D" to show hitboxes', {
                 font: '18px monospace',
                 fill: '#000000',
                 padding: {x: 20, y: 10},
@@ -176,37 +189,37 @@ class IIITCampus extends Phaser.Scene {
         // Update the animation last and give left/right animations precedence over up/down
         // animations
         if (cursors.left.isDown) {
-            player.anims.play('misa-left-walk', true);
+            player.anims.play('player-left-walk', true);
         } else if (cursors.right.isDown) {
-            player.anims.play('misa-right-walk', true);
+            player.anims.play('player-right-walk', true);
         } else if (cursors.up.isDown) {
-            player.anims.play('misa-back-walk', true);
+            player.anims.play('player-back-walk', true);
         } else if (cursors.down.isDown) {
-            player.anims.play('misa-front-walk', true);
+            player.anims.play('player-front-walk', true);
         } else {
             player.anims.stop();
 
             // If we were moving, pick and idle frame to use
             if (prevVelocity.x < 0)
-                player.setTexture('atlas', 'misa-left');
+                player.setTexture('atlas', 'player-left');
             else if (prevVelocity.x > 0)
-                player.setTexture('atlas', 'misa-right');
+                player.setTexture('atlas', 'player-right');
             else if (prevVelocity.y < 0)
-                player.setTexture('atlas', 'misa-back');
+                player.setTexture('atlas', 'player-back');
             else if (prevVelocity.y > 0)
-                player.setTexture('atlas', 'misa-front');
+                player.setTexture('atlas', 'player-front');
         }
     }
     // }}}
 }
 
-// phaser config
+// phaser config {{{
 const config = {
     type: Phaser.AUTO,
     parent: 'main-container',
     pixelArt: true,
-    width: 800,
-    height: 600,
+    width: canvasWidth,
+    height: canvasHeight,
     scene: IIITCampus,
     physics: {
         default: 'arcade',
@@ -215,6 +228,7 @@ const config = {
         },
     },
 };
+// }}}
 
 const game = new Phaser.Game(config);
 
