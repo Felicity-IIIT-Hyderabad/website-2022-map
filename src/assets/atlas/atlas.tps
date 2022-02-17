@@ -197,26 +197,26 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">tuxemon-misa/misa-back-walk.000.png</key>
-            <key type="filename">tuxemon-misa/misa-back-walk.001.png</key>
-            <key type="filename">tuxemon-misa/misa-back-walk.002.png</key>
-            <key type="filename">tuxemon-misa/misa-back-walk.003.png</key>
-            <key type="filename">tuxemon-misa/misa-back.png</key>
-            <key type="filename">tuxemon-misa/misa-front-walk.000.png</key>
-            <key type="filename">tuxemon-misa/misa-front-walk.001.png</key>
-            <key type="filename">tuxemon-misa/misa-front-walk.002.png</key>
-            <key type="filename">tuxemon-misa/misa-front-walk.003.png</key>
-            <key type="filename">tuxemon-misa/misa-front.png</key>
-            <key type="filename">tuxemon-misa/misa-left-walk.000.png</key>
-            <key type="filename">tuxemon-misa/misa-left-walk.001.png</key>
-            <key type="filename">tuxemon-misa/misa-left-walk.002.png</key>
-            <key type="filename">tuxemon-misa/misa-left-walk.003.png</key>
-            <key type="filename">tuxemon-misa/misa-left.png</key>
-            <key type="filename">tuxemon-misa/misa-right-walk.000.png</key>
-            <key type="filename">tuxemon-misa/misa-right-walk.001.png</key>
-            <key type="filename">tuxemon-misa/misa-right-walk.002.png</key>
-            <key type="filename">tuxemon-misa/misa-right-walk.003.png</key>
-            <key type="filename">tuxemon-misa/misa-right.png</key>
+            <key type="filename">tuxemon-player/player-back-walk.000.png</key>
+            <key type="filename">tuxemon-player/player-back-walk.001.png</key>
+            <key type="filename">tuxemon-player/player-back-walk.002.png</key>
+            <key type="filename">tuxemon-player/player-back-walk.003.png</key>
+            <key type="filename">tuxemon-player/player-back.png</key>
+            <key type="filename">tuxemon-player/player-front-walk.000.png</key>
+            <key type="filename">tuxemon-player/player-front-walk.001.png</key>
+            <key type="filename">tuxemon-player/player-front-walk.002.png</key>
+            <key type="filename">tuxemon-player/player-front-walk.003.png</key>
+            <key type="filename">tuxemon-player/player-front.png</key>
+            <key type="filename">tuxemon-player/player-left-walk.000.png</key>
+            <key type="filename">tuxemon-player/player-left-walk.001.png</key>
+            <key type="filename">tuxemon-player/player-left-walk.002.png</key>
+            <key type="filename">tuxemon-player/player-left-walk.003.png</key>
+            <key type="filename">tuxemon-player/player-left.png</key>
+            <key type="filename">tuxemon-player/player-right-walk.000.png</key>
+            <key type="filename">tuxemon-player/player-right-walk.001.png</key>
+            <key type="filename">tuxemon-player/player-right-walk.002.png</key>
+            <key type="filename">tuxemon-player/player-right-walk.003.png</key>
+            <key type="filename">tuxemon-player/player-right.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -232,7 +232,7 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>tuxemon-misa</filename>
+            <filename>tuxemon-player</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
