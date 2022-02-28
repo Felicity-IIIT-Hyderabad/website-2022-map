@@ -1,0 +1,3 @@
+[submodule "src/assets/iiit"]
+    path = src/assets/iiit
+    url = https://github.com/Felicity-IIIT-Hyderabad/iiith-tilemap-design.git

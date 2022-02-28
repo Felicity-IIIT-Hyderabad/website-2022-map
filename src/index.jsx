@@ -9,7 +9,7 @@ import mainMap from "./assets/iiit/progress.json";
 import App from "./components/App.jsx";
 
 // tilesets used
-const tilesets = [
+const tilesetKeys = [
     "buildings",
     "cityset",
     "poke5",
@@ -22,6 +22,17 @@ const tilesets = [
     "v_walls",
     "v_windows",
 ];
+
+// layer keys
+const aboveKeys = mainMap.layers
+    .filter((l) => l.name.substring(0, 2) === "A_")
+    .map((l) => ({ name: l.name, x: l.startx, y: l.starty }));
+const worldKeys = mainMap.layers
+    .filter((l) => l.name.substring(0, 2) === "W_")
+    .map((l) => ({ name: l.name, x: l.startx, y: l.starty }));
+const belowKeys = mainMap.layers
+    .filter((l) => l.name.substring(0, 2) === "B_")
+    .map((l) => ({ name: l.name, x: l.startx, y: l.starty }));
 
 var cursors;
 var player;
@@ -52,7 +63,7 @@ class IIITCampus extends Phaser.Scene {
         this.load.tilemapTiledJSON("main-map", mainMap);
 
         // load tilesets
-        tilesets.forEach((ts) => {
+        tilesetKeys.forEach((ts) => {
             this.load.image(ts, require(`./assets/iiit/${ts}.png`));
         });
 
@@ -67,47 +78,36 @@ class IIITCampus extends Phaser.Scene {
 
         // parameters are the name you gave the tileset in Tiled and then the key of the tileset
         // image in Phaser's cache (i.e. the name you used in preload)
-        // const tileset = map.addTilesetImage('tuxmon-sample-32px-extruded', 'main-tileset');
-        const buildings = map.addTilesetImage("buildings", "buildings");
-        const cityset = map.addTilesetImage("cityset", "cityset");
-        const poke5 = map.addTilesetImage("poke5", "poke5");
-        const pokebldg = map.addTilesetImage("pokebldg", "pokebldg");
-        const pokebldg_1 = map.addTilesetImage("pokebldg_1", "pokebldg_1");
-        const pokeset = map.addTilesetImage("pokeset", "pokeset");
-        const t_megaset = map.addTilesetImage("t_megaset", "t_megaset");
-        const v_garden = map.addTilesetImage("v_garden", "v_garden");
-        const v_streets = map.addTilesetImage("v_streets", "v_streets");
-        const v_walls = map.addTilesetImage("v_walls", "v_walls");
-        const v_windows = map.addTilesetImage("v_windows", "v_windows");
-        const tileset = [
-            buildings,
-            cityset,
-            poke5,
-            pokebldg,
-            pokebldg_1,
-            pokeset,
-            t_megaset,
-            v_garden,
-            v_streets,
-            v_walls,
-            v_windows,
-        ];
+        var tilesetImages = {};
+        tilesetKeys.forEach((ts) => {
+            tilesetImages[ts] = map.addTilesetImage(ts, ts);
+        });
 
         // parameters: layer name (or index) from Tiled, tileset, x, y
-        const base = map.createLayer("base", tileset, 0, 0);
+        var layers = {};
+        [belowKeys, worldKeys, aboveKeys].forEach((layerKeys) => {
+            layerKeys.forEach((l) => {
+                layers[l.name] = map.createLayer(
+                    l.name,
+                    Object.values(tilesetImages),
+                    l.x * mainMap.tilewidth,
+                    l.y * mainMap.tilewidth
+                );
+            });
+        });
 
         // Enable collisions
-        // worldLayer.setCollisionByProperty({ collides: true });
+        worldKeys.forEach((l) => layers[l.name].setCollisionByProperty({ collides: true }));
 
         // By default, everything gets depth sorted on the screen in the order we created things.
         // Here, we want the "Above Player" layer to sit on top of the player, so we explicitly give
         // it a depth. Higher depths will sit on top of lower depth objects.
-        // aboveLayer.setDepth(10);
+        aboveKeys.forEach((l) => layers[l.name].setDepth(10));
 
         // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
         // collision shapes. In the tmx file, there's an object layer with a point named "Spawn
         // Point"
-        const spawnPoint = map.findObject("Objects", (obj) => obj.name === "Spawn Point");
+        const spawnPoint = map.findObject("O_all", (obj) => obj.name === "spawn_point");
 
         // Create a sprite with physics enabled via the physics system. The image used for the
         // sprite has a bit of whitespace, so I'm using setSize & setOffset to control the size of
@@ -118,7 +118,7 @@ class IIITCampus extends Phaser.Scene {
             .setOffset(0, 24);
 
         // Watch the player and worldLayer for collisions, for the duration of the scene:
-        // this.physics.add.collider(player, worldLayer);
+        worldKeys.forEach((l) => this.physics.add.collider(player, layers[l.name]));
 
         // Create the player's walking animations from the texture atlas. These are stored in the
         // global animation manager so any sprite can access them.
