@@ -1,12 +1,27 @@
-import Phaser from 'phaser';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import Phaser from "phaser";
+import React from "react";
+import ReactDOM from "react-dom";
 
-import atlasJSON from './assets/atlas/atlas.json';
-import atlasPNG from './assets/atlas/atlas.png';
-import mainMap from './assets/tuxemon-town.json';
-import mainTileset from './assets/tuxmon-sample-32px-extruded.png';
-import App from './components/App.jsx';
+import atlasJSON from "./assets/atlas/atlas.json";
+import atlasPNG from "./assets/atlas/atlas.png";
+import mainMap from "./assets/iiit/progress.json";
+
+import App from "./components/App.jsx";
+
+// tilesets used
+const tilesets = [
+    "buildings",
+    "cityset",
+    "poke5",
+    "pokebldg",
+    "pokebldg_1",
+    "pokeset",
+    "t_megaset",
+    "v_garden",
+    "v_streets",
+    "v_walls",
+    "v_windows",
+];
 
 var cursors;
 var player;
@@ -34,57 +49,84 @@ class IIITCampus extends Phaser.Scene {
     // preload {{{
     preload() {
         // map
-        this.load.image('main-tileset', mainTileset);
-        this.load.tilemapTiledJSON('main-map', mainMap);
+        this.load.tilemapTiledJSON("main-map", mainMap);
+
+        // load tilesets
+        tilesets.forEach((ts) => {
+            this.load.image(ts, require(`./assets/iiit/${ts}.png`));
+        });
 
         // atlas (for player sprite)
-        this.load.atlas('atlas', atlasPNG, atlasJSON);
+        this.load.atlas("atlas", atlasPNG, atlasJSON);
     }
     // }}}
 
     // create {{{
     create() {
-        const map = this.make.tilemap({key: 'main-map'});
+        const map = this.make.tilemap({ key: "main-map" });
 
         // parameters are the name you gave the tileset in Tiled and then the key of the tileset
         // image in Phaser's cache (i.e. the name you used in preload)
-        const tileset = map.addTilesetImage('tuxmon-sample-32px-extruded', 'main-tileset');
+        // const tileset = map.addTilesetImage('tuxmon-sample-32px-extruded', 'main-tileset');
+        const buildings = map.addTilesetImage("buildings", "buildings");
+        const cityset = map.addTilesetImage("cityset", "cityset");
+        const poke5 = map.addTilesetImage("poke5", "poke5");
+        const pokebldg = map.addTilesetImage("pokebldg", "pokebldg");
+        const pokebldg_1 = map.addTilesetImage("pokebldg_1", "pokebldg_1");
+        const pokeset = map.addTilesetImage("pokeset", "pokeset");
+        const t_megaset = map.addTilesetImage("t_megaset", "t_megaset");
+        const v_garden = map.addTilesetImage("v_garden", "v_garden");
+        const v_streets = map.addTilesetImage("v_streets", "v_streets");
+        const v_walls = map.addTilesetImage("v_walls", "v_walls");
+        const v_windows = map.addTilesetImage("v_windows", "v_windows");
+        const tileset = [
+            buildings,
+            cityset,
+            poke5,
+            pokebldg,
+            pokebldg_1,
+            pokeset,
+            t_megaset,
+            v_garden,
+            v_streets,
+            v_walls,
+            v_windows,
+        ];
 
         // parameters: layer name (or index) from Tiled, tileset, x, y
-        const belowLayer = map.createLayer('Below Player', tileset, 0, 0);
-        const worldLayer = map.createLayer('World', tileset, 0, 0);
-        const aboveLayer = map.createLayer('Above Player', tileset, 0, 0);
+        const base = map.createLayer("base", tileset, 0, 0);
 
         // Enable collisions
-        worldLayer.setCollisionByProperty({collides: true});
+        // worldLayer.setCollisionByProperty({ collides: true });
 
         // By default, everything gets depth sorted on the screen in the order we created things.
         // Here, we want the "Above Player" layer to sit on top of the player, so we explicitly give
         // it a depth. Higher depths will sit on top of lower depth objects.
-        aboveLayer.setDepth(10);
+        // aboveLayer.setDepth(10);
 
         // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
         // collision shapes. In the tmx file, there's an object layer with a point named "Spawn
         // Point"
-        const spawnPoint = map.findObject('Objects', (obj) => obj.name === 'Spawn Point');
+        const spawnPoint = map.findObject("Objects", (obj) => obj.name === "Spawn Point");
 
         // Create a sprite with physics enabled via the physics system. The image used for the
         // sprite has a bit of whitespace, so I'm using setSize & setOffset to control the size of
         // the player's body.
-        player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'atlas', 'player-front')
-                     .setSize(30, 40)
-                     .setOffset(0, 24);
+        player = this.physics.add
+            .sprite(spawnPoint.x, spawnPoint.y, "atlas", "player-front")
+            .setSize(30, 40)
+            .setOffset(0, 24);
 
         // Watch the player and worldLayer for collisions, for the duration of the scene:
-        this.physics.add.collider(player, worldLayer);
+        // this.physics.add.collider(player, worldLayer);
 
         // Create the player's walking animations from the texture atlas. These are stored in the
         // global animation manager so any sprite can access them.
         const anims = this.anims;
         anims.create({
-            key: 'player-left-walk',
-            frames: anims.generateFrameNames('atlas', {
-                prefix: 'player-left-walk.',
+            key: "player-left-walk",
+            frames: anims.generateFrameNames("atlas", {
+                prefix: "player-left-walk.",
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -93,9 +135,9 @@ class IIITCampus extends Phaser.Scene {
             repeat: -1,
         });
         anims.create({
-            key: 'player-right-walk',
-            frames: anims.generateFrameNames('atlas', {
-                prefix: 'player-right-walk.',
+            key: "player-right-walk",
+            frames: anims.generateFrameNames("atlas", {
+                prefix: "player-right-walk.",
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -104,9 +146,9 @@ class IIITCampus extends Phaser.Scene {
             repeat: -1,
         });
         anims.create({
-            key: 'player-front-walk',
-            frames: anims.generateFrameNames('atlas', {
-                prefix: 'player-front-walk.',
+            key: "player-front-walk",
+            frames: anims.generateFrameNames("atlas", {
+                prefix: "player-front-walk.",
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -115,9 +157,9 @@ class IIITCampus extends Phaser.Scene {
             repeat: -1,
         });
         anims.create({
-            key: 'player-back-walk',
-            frames: anims.generateFrameNames('atlas', {
-                prefix: 'player-back-walk.',
+            key: "player-back-walk",
+            frames: anims.generateFrameNames("atlas", {
+                prefix: "player-back-walk.",
                 start: 0,
                 end: 3,
                 zeroPad: 3,
@@ -135,35 +177,33 @@ class IIITCampus extends Phaser.Scene {
         // Help text that has a "fixed" position on the screen
         this.add
             .text(16, 16, 'Arrow keys to move\n"D" to show hitboxes', {
-                font: '18px monospace',
-                fill: '#000000',
-                padding: {x: 20, y: 10},
-                backgroundColor: '#ffffff',
+                font: "18px monospace",
+                fill: "#000000",
+                padding: { x: 20, y: 10 },
+                backgroundColor: "#ffffff",
             })
             .setScrollFactor(0)
             .setDepth(30);
 
         // Debug graphics
-        this.input.keyboard.once('keydown-D', (event) => {
-            // Turn on physics debugging to show player's hitbox
-            this.physics.world.createDebugGraphic();
+        // this.input.keyboard.once("keydown-D", (event) => {
+        //     // Turn on physics debugging to show player's hitbox
+        //     this.physics.world.createDebugGraphic();
 
-            // Create worldLayer collision graphic above the player, but below the help text
-            const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-            worldLayer.renderDebug(graphics, {
-                tileColor: null,  // Color of non-colliding tiles
-                collidingTileColor:
-                    new Phaser.Display.Color(243, 134, 48, 255),  // Color of colliding tiles
-                faceColor:
-                    new Phaser.Display.Color(40, 39, 37, 255),  // Color of colliding face edges
-            });
-        });
+        //     // Create worldLayer collision graphic above the player, but below the help text
+        //     const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
+        //     worldLayer.renderDebug(graphics, {
+        //         tileColor: null, // Color of non-colliding tiles
+        //         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        //         faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+        //     });
+        // });
     }
     // }}}
 
     // update {{{
     update() {
-        const speed = 175;
+        const speed = 200;
         const prevVelocity = player.body.velocity.clone();
 
         // Stop any previous movement from the last frame
@@ -189,25 +229,21 @@ class IIITCampus extends Phaser.Scene {
         // Update the animation last and give left/right animations precedence over up/down
         // animations
         if (cursors.left.isDown) {
-            player.anims.play('player-left-walk', true);
+            player.anims.play("player-left-walk", true);
         } else if (cursors.right.isDown) {
-            player.anims.play('player-right-walk', true);
+            player.anims.play("player-right-walk", true);
         } else if (cursors.up.isDown) {
-            player.anims.play('player-back-walk', true);
+            player.anims.play("player-back-walk", true);
         } else if (cursors.down.isDown) {
-            player.anims.play('player-front-walk', true);
+            player.anims.play("player-front-walk", true);
         } else {
             player.anims.stop();
 
             // If we were moving, pick and idle frame to use
-            if (prevVelocity.x < 0)
-                player.setTexture('atlas', 'player-left');
-            else if (prevVelocity.x > 0)
-                player.setTexture('atlas', 'player-right');
-            else if (prevVelocity.y < 0)
-                player.setTexture('atlas', 'player-back');
-            else if (prevVelocity.y > 0)
-                player.setTexture('atlas', 'player-front');
+            if (prevVelocity.x < 0) player.setTexture("atlas", "player-left");
+            else if (prevVelocity.x > 0) player.setTexture("atlas", "player-right");
+            else if (prevVelocity.y < 0) player.setTexture("atlas", "player-back");
+            else if (prevVelocity.y > 0) player.setTexture("atlas", "player-front");
         }
     }
     // }}}
@@ -216,15 +252,15 @@ class IIITCampus extends Phaser.Scene {
 // phaser config {{{
 const config = {
     type: Phaser.AUTO,
-    parent: 'main-container',
+    parent: "main-container",
     pixelArt: true,
     width: canvasWidth,
     height: canvasHeight,
     scene: IIITCampus,
     physics: {
-        default: 'arcade',
+        default: "arcade",
         arcade: {
-            gravity: {y: 0},  // Top down game, so no gravity
+            gravity: { y: 0 }, // Top down game, so no gravity
         },
     },
 };
@@ -232,4 +268,4 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
