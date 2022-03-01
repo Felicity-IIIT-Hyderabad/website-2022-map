@@ -4,35 +4,23 @@ import ReactDOM from "react-dom";
 
 import atlasJSON from "./assets/atlas/atlas.json";
 import atlasPNG from "./assets/atlas/atlas.png";
-import mainMap from "./assets/iiit/progress.json";
+import mainMap from "./assets/iiit/progress_3l.json";
 
 import App from "./components/App.jsx";
 
 // tilesets used
-const tilesetKeys = [
-    "buildings",
-    "cityset",
-    "poke5",
-    "pokebldg",
-    "pokebldg_1",
-    "pokeset",
-    "t_megaset",
-    "v_garden",
-    "v_streets",
-    "v_walls",
-    "v_windows",
-];
+const tilesetKeys = ["progressabove", "progressworld", "progressbelow"];
 
 // layer keys
 const aboveKeys = mainMap.layers
-    .filter((l) => l.name.substring(0, 2) === "A_")
-    .map((l) => ({ name: l.name, x: l.startx, y: l.starty }));
+    .filter((l) => l.name === "above")
+    .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 const worldKeys = mainMap.layers
-    .filter((l) => l.name.substring(0, 2) === "W_")
-    .map((l) => ({ name: l.name, x: l.startx, y: l.starty }));
+    .filter((l) => l.name === "world")
+    .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 const belowKeys = mainMap.layers
-    .filter((l) => l.name.substring(0, 2) === "B_")
-    .map((l) => ({ name: l.name, x: l.startx, y: l.starty }));
+    .filter((l) => l.name === "below")
+    .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 
 var cursors;
 var player;
@@ -47,8 +35,8 @@ var mapHeight = mainMap.height * mainMap.tilewidth;
 var mapWidth = mainMap.width * mainMap.tilewidth;
 
 // dynamically adjust canvas dimensions
-canvasWidth = canvasWidth > mapWidth ? mapWidth : canvasWidth;
-canvasHeight = canvasHeight > mapHeight ? mapHeight : canvasHeight;
+canvasWidth = 800; //canvasWidth > mapWidth ? mapWidth : canvasWidth;
+canvasHeight = 600; //canvasHeight > mapHeight ? mapHeight : canvasHeight;
 
 class IIITCampus extends Phaser.Scene {
     // constructor {{{
@@ -87,12 +75,7 @@ class IIITCampus extends Phaser.Scene {
         var layers = {};
         [belowKeys, worldKeys, aboveKeys].forEach((layerKeys) => {
             layerKeys.forEach((l) => {
-                layers[l.name] = map.createLayer(
-                    l.name,
-                    Object.values(tilesetImages),
-                    l.x * mainMap.tilewidth,
-                    l.y * mainMap.tilewidth
-                );
+                layers[l.name] = map.createLayer(l.name, Object.values(tilesetImages), l.x, l.y);
             });
         });
 
@@ -186,18 +169,18 @@ class IIITCampus extends Phaser.Scene {
             .setDepth(30);
 
         // Debug graphics
-        // this.input.keyboard.once("keydown-D", (event) => {
-        //     // Turn on physics debugging to show player's hitbox
-        //     this.physics.world.createDebugGraphic();
+        this.input.keyboard.once("keydown-D", (event) => {
+            // Turn on physics debugging to show player's hitbox
+            this.physics.world.createDebugGraphic();
 
-        //     // Create worldLayer collision graphic above the player, but below the help text
-        //     const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-        //     worldLayer.renderDebug(graphics, {
-        //         tileColor: null, // Color of non-colliding tiles
-        //         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //         faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-        //     });
-        // });
+            // Create worldLayer collision graphic above the player, but below the help text
+            const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
+            worldLayer.renderDebug(graphics, {
+                tileColor: null, // Color of non-colliding tiles
+                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+                faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+            });
+        });
     }
     // }}}
 
