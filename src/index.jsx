@@ -11,6 +11,8 @@ import App from "./components/App.jsx";
 // tilesets used
 const tilesetKeys = ["progressabove", "progressworld", "progressbelow"];
 
+const mapScale = 2;
+
 // layer keys
 const aboveKeys = mainMap.layers
     .filter((l) => l.name === "above")
@@ -29,14 +31,6 @@ var player;
 var canvasMargin = 80;
 var canvasWidth = window.innerWidth * window.devicePixelRatio - canvasMargin;
 var canvasHeight = window.innerHeight * window.devicePixelRatio - canvasMargin;
-
-// map dimensions
-var mapHeight = mainMap.height * mainMap.tilewidth;
-var mapWidth = mainMap.width * mainMap.tilewidth;
-
-// dynamically adjust canvas dimensions
-canvasWidth = 800; //canvasWidth > mapWidth ? mapWidth : canvasWidth;
-canvasHeight = 600; //canvasHeight > mapHeight ? mapHeight : canvasHeight;
 
 class IIITCampus extends Phaser.Scene {
     // constructor {{{
@@ -75,7 +69,8 @@ class IIITCampus extends Phaser.Scene {
         var layers = {};
         [belowKeys, worldKeys, aboveKeys].forEach((layerKeys) => {
             layerKeys.forEach((l) => {
-                layers[l.name] = map.createLayer(l.name, Object.values(tilesetImages), l.x, l.y);
+                layers[l.name] = map.createLayer(l.name, Object.values(tilesetImages), l.x * mapScale, l.y * mapScale);
+                layers[l.name].setScale(mapScale, mapScale);
             });
         });
 
@@ -153,7 +148,7 @@ class IIITCampus extends Phaser.Scene {
 
         const camera = this.cameras.main;
         camera.startFollow(player);
-        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        camera.setBounds(0, 0, map.widthInPixels * mapScale, map.heightInPixels * mapScale);
 
         cursors = this.input.keyboard.createCursorKeys();
 
