@@ -4,24 +4,27 @@ import ReactDOM from "react-dom";
 
 import atlasJSON from "./assets/atlas/atlas.json";
 import atlasPNG from "./assets/atlas/atlas.png";
-import mainMap from "./assets/iiit/progress_3l.json";
+import mainMap from "./assets/iiit/4_layer_gameplay_optimization/4layers.json";
 
 import App from "./components/App.jsx";
 
 // tilesets used
-const tilesetKeys = ["progressabove", "progressworld", "progressbelow"];
+const tilesetKeys = ["hover", "world", "below", "base"];
 
 const mapScale = 2;
 
 // layer keys
 const aboveKeys = mainMap.layers
-    .filter((l) => l.name === "above")
+    .filter((l) => l.name === "hover_layer")
     .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 const worldKeys = mainMap.layers
-    .filter((l) => l.name === "world")
+    .filter((l) => l.name === "world_layer")
     .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 const belowKeys = mainMap.layers
-    .filter((l) => l.name === "below")
+    .filter((l) => l.name === "below_layer")
+    .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
+const baseKeys = mainMap.layers
+    .filter((l) => l.name === "base_layer")
     .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 
 var cursors;
@@ -29,8 +32,8 @@ var player;
 
 // canvas dimensions
 var canvasMargin = 80;
-var canvasWidth = window.innerWidth * window.devicePixelRatio - canvasMargin;
-var canvasHeight = window.innerHeight * window.devicePixelRatio - canvasMargin;
+var canvasWidth = 800; // window.innerWidth * window.devicePixelRatio - canvasMargin;
+var canvasHeight = 600; // window.innerHeight * window.devicePixelRatio - canvasMargin;
 
 class IIITCampus extends Phaser.Scene {
     // constructor {{{
@@ -46,7 +49,7 @@ class IIITCampus extends Phaser.Scene {
 
         // load tilesets
         tilesetKeys.forEach((ts) => {
-            this.load.image(ts, require(`./assets/iiit/${ts}.png`));
+            this.load.image(ts, require(`./assets/iiit/4_layer_gameplay_optimization/${ts}.png`));
         });
 
         // atlas (for player sprite)
@@ -67,9 +70,14 @@ class IIITCampus extends Phaser.Scene {
 
         // parameters: layer name (or index) from Tiled, tileset, x, y
         var layers = {};
-        [belowKeys, worldKeys, aboveKeys].forEach((layerKeys) => {
+        [baseKeys, belowKeys, worldKeys, aboveKeys].forEach((layerKeys) => {
             layerKeys.forEach((l) => {
-                layers[l.name] = map.createLayer(l.name, Object.values(tilesetImages), l.x * mapScale, l.y * mapScale);
+                layers[l.name] = map.createLayer(
+                    l.name,
+                    Object.values(tilesetImages),
+                    l.x * mapScale,
+                    l.y * mapScale
+                );
                 layers[l.name].setScale(mapScale, mapScale);
             });
         });
@@ -81,22 +89,26 @@ class IIITCampus extends Phaser.Scene {
         // Here, we want the "Above Player" layer to sit on top of the player, so we explicitly give
         // it a depth. Higher depths will sit on top of lower depth objects.
         aboveKeys.forEach((l) => layers[l.name].setDepth(10));
+        belowKeys.forEach((l) => layers[l.name].setDepth(0));
 
         // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
         // collision shapes. In the tmx file, there's an object layer with a point named "Spawn
         // Point"
-        const spawnPoint = map.findObject("O_all", (obj) => obj.name === "spawn_point");
+        const spawnPoint = map.findObject("object_layer", (obj) => obj.name === "spawn_point");
 
         // Create a sprite with physics enabled via the physics system. The image used for the
         // sprite has a bit of whitespace, so I'm using setSize & setOffset to control the size of
         // the player's body.
         player = this.physics.add
-            .sprite(spawnPoint.x, spawnPoint.y, "atlas", "player-front")
+            .sprite(spawnPoint.x * mapScale, spawnPoint.y * mapScale, "atlas", "player-front")
             .setSize(30, 40)
             .setOffset(0, 24);
 
         // Watch the player and worldLayer for collisions, for the duration of the scene:
-        worldKeys.forEach((l) => this.physics.add.collider(player, layers[l.name]));
+        worldKeys.forEach((l) => {
+            // l.setCollisionByExclusion([-1]);
+            this.physics.add.collider(player, layers[l.name]);
+        });
 
         // Create the player's walking animations from the texture atlas. These are stored in the
         // global animation manager so any sprite can access them.
@@ -181,7 +193,7 @@ class IIITCampus extends Phaser.Scene {
 
     // update {{{
     update() {
-        const speed = 200;
+        const speed = 400;
         const prevVelocity = player.body.velocity.clone();
 
         // Stop any previous movement from the last frame
