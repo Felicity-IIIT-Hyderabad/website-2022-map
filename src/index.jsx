@@ -88,8 +88,7 @@ class IIITCampus extends Phaser.Scene {
         // By default, everything gets depth sorted on the screen in the order we created things.
         // Here, we want the "Above Player" layer to sit on top of the player, so we explicitly give
         // it a depth. Higher depths will sit on top of lower depth objects.
-        aboveKeys.forEach((l) => layers[l.name].setDepth(10));
-        belowKeys.forEach((l) => layers[l.name].setDepth(0));
+        aboveKeys.forEach((l) => layers[l.name].setDepth(20));
 
         // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
         // collision shapes. In the tmx file, there's an object layer with a point named "Spawn
@@ -106,7 +105,6 @@ class IIITCampus extends Phaser.Scene {
 
         // Watch the player and worldLayer for collisions, for the duration of the scene:
         worldKeys.forEach((l) => {
-            // l.setCollisionByExclusion([-1]);
             this.physics.add.collider(player, layers[l.name]);
         });
 
@@ -182,10 +180,12 @@ class IIITCampus extends Phaser.Scene {
 
             // Create worldLayer collision graphic above the player, but below the help text
             const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-            worldLayer.renderDebug(graphics, {
-                tileColor: null, // Color of non-colliding tiles
-                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-                faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+            worldKeys.forEach((l) => {
+                layers[l.name].renderDebug(graphics, {
+                    tileColor: null, // Color of non-colliding tiles
+                    collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+                    faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+                });
             });
         });
     }
