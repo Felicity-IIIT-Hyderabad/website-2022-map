@@ -25,7 +25,7 @@ const belowKeys = mainMap.layers
     .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 const baseKeys = mainMap.layers
     .filter((l) => l.name === "base_layer")
-    .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
+    .map((l) => ({ name: l.name, x: 0, y: 0 }));
 
 var cursors;
 var player;
