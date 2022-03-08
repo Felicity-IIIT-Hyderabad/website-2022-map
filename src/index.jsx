@@ -48,6 +48,47 @@ class IIITCampus extends Phaser.Scene {
 
     // preload {{{
     preload() {
+        // loading screen
+        const progressLength = 320;
+        const progressHeight = 30;
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(
+            (canvasWidth - progressLength) / 2,
+            (canvasHeight - progressHeight) / 2,
+            progressLength,
+            progressHeight
+        );
+
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        var loadingText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            text: "Felicity '22",
+            style: {
+                font: "20px monospace",
+                fill: "#ffffff",
+            },
+        });
+        loadingText.setOrigin(0.5, 0.5);
+
+        this.load.on("progress", function (value) {
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1.0);
+            progressBar.fillRect(
+                (canvasWidth - progressLength) / 2 + 10,
+                (canvasHeight - progressHeight) / 2 + 10,
+                (progressLength - 20) * value,
+                progressHeight - 20
+            );
+        });
+
+        this.load.on("complete", function () {
+            loadingText.destroy();
+        });
+
         // map
         this.load.tilemapTiledJSON("main-map", mainMap);
 
