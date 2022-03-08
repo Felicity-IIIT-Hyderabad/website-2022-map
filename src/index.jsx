@@ -30,10 +30,14 @@ const baseKeys = mainMap.layers
 var cursors;
 var player;
 
+// keys
+var shiftKey;
+var isSprinting = false;
+
 // canvas dimensions
 var canvasMargin = 80;
-var canvasWidth = 800; // window.innerWidth * window.devicePixelRatio - canvasMargin;
-var canvasHeight = 600; // window.innerHeight * window.devicePixelRatio - canvasMargin;
+var canvasWidth = 1280; // window.innerWidth * window.devicePixelRatio - canvasMargin;
+var canvasHeight = 720; // window.innerHeight * window.devicePixelRatio - canvasMargin;
 
 class IIITCampus extends Phaser.Scene {
     // constructor {{{
@@ -164,7 +168,7 @@ class IIITCampus extends Phaser.Scene {
 
         // Help text that has a "fixed" position on the screen
         this.add
-            .text(16, 16, 'Arrow keys to move\n"D" to show hitboxes', {
+            .text(16, 16, 'Arrow keys to move\n"D" to show hitboxes\n"Shift" to sprint', {
                 font: "18px monospace",
                 fill: "#000000",
                 padding: { x: 20, y: 10 },
@@ -188,33 +192,43 @@ class IIITCampus extends Phaser.Scene {
                 });
             });
         });
+
+        // sprint key
+        shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
     }
     // }}}
 
     // update {{{
     update() {
-        const speed = 400;
+        const speed = 200;
+        const sprintMultiplier = 4;
         const prevVelocity = player.body.velocity.clone();
 
         // Stop any previous movement from the last frame
         player.body.setVelocity(0);
 
+        if (shiftKey.isDown) {
+            isSprinting = true;
+        } else {
+            isSprinting = false;
+        }
+
         // Horizontal movement
         if (cursors.left.isDown) {
-            player.body.setVelocityX(-speed);
+            player.body.setVelocityX(-speed * (isSprinting ? sprintMultiplier : 1));
         } else if (cursors.right.isDown) {
-            player.body.setVelocityX(speed);
+            player.body.setVelocityX(speed * (isSprinting ? sprintMultiplier : 1));
         }
 
         // Vertical movement
         if (cursors.up.isDown) {
-            player.body.setVelocityY(-speed);
+            player.body.setVelocityY(-speed * (isSprinting ? sprintMultiplier : 1));
         } else if (cursors.down.isDown) {
-            player.body.setVelocityY(speed);
+            player.body.setVelocityY(speed * (isSprinting ? sprintMultiplier : 1));
         }
 
         // Normalize and scale the velocity so that player can't move faster along a diagonal
-        player.body.velocity.normalize().scale(speed);
+        player.body.velocity.normalize().scale(speed * (isSprinting ? sprintMultiplier : 1));
 
         // Update the animation last and give left/right animations precedence over up/down
         // animations
