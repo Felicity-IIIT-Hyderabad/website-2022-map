@@ -88,6 +88,8 @@ class IIITCampus extends Phaser.Scene {
         });
 
         this.load.on("complete", function () {
+            progressBar.destroy();
+            progressBox.destroy();
             loadingText.destroy();
         });
 
