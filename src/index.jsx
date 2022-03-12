@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import atlasJSON from "./assets/atlas/atlas.json";
 import atlasPNG from "./assets/atlas/atlas.png";
 import mainMap from "./assets/iiit/4_layer_gameplay_optimization/4layers.json";
+import DialogPlugin from "./components/DialogManager.jsx";
 
 import App from "./components/App.jsx";
 
@@ -27,13 +28,14 @@ const baseKeys = mainMap.layers
     .filter((l) => l.name === "base_layer")
     .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 
-var cursors;
-var player;
+let cursors;
+let player;
 
 // canvas dimensions
-var canvasMargin = 80;
-var canvasWidth = 800; // window.innerWidth * window.devicePixelRatio - canvasMargin;
-var canvasHeight = 600; // window.innerHeight * window.devicePixelRatio - canvasMargin;
+const canvasMarginWidth = 200;
+const canvasMarginHeight = 150;
+const canvasWidth = window.innerWidth * window.devicePixelRatio - canvasMarginWidth;
+const canvasHeight = window.innerHeight * window.devicePixelRatio - canvasMarginHeight;
 
 class IIITCampus extends Phaser.Scene {
     // constructor {{{
@@ -104,6 +106,8 @@ class IIITCampus extends Phaser.Scene {
             .setSize(30, 40)
             .setOffset(0, 24);
 
+        this.player = player;
+
         // Watch the player and worldLayer for collisions, for the duration of the scene:
         worldKeys.forEach((l) => {
             // l.setCollisionByExclusion([-1]);
@@ -165,29 +169,36 @@ class IIITCampus extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         // Help text that has a "fixed" position on the screen
-        this.add
-            .text(16, 16, 'Arrow keys to move\n"D" to show hitboxes', {
-                font: "18px monospace",
-                fill: "#000000",
-                padding: { x: 20, y: 10 },
-                backgroundColor: "#ffffff",
-            })
-            .setScrollFactor(0)
-            .setDepth(30);
+        // this.add
+        //     .text(16, 16, "Use Arrow keys to move", {
+        //         font: "18px monospace",
+        //         fill: "#000000",
+        //         padding: { x: 20, y: 10 },
+        //         backgroundColor: "#ffffff",
+        //     })
+        //     .setScrollFactor(0)
+        //     .setDepth(30);
 
-        // Debug graphics
-        this.input.keyboard.once("keydown-D", (event) => {
-            // Turn on physics debugging to show player's hitbox
-            this.physics.world.createDebugGraphic();
+        // // Debug graphics
+        // this.input.keyboard.once("keydown-D", () => {
+        //     // Turn on physics debugging to show player's hitbox
+        //     this.physics.world.createDebugGraphic();
 
-            // Create worldLayer collision graphic above the player, but below the help text
-            const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-            worldLayer.renderDebug(graphics, {
-                tileColor: null, // Color of non-colliding tiles
-                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-                faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-            });
+        //     // Create worldLayer collision graphic above the player, but below the help text
+        //     const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
+        //     worldLayer.renderDebug(graphics, {
+        //         tileColor: null, // Color of non-colliding tiles
+        //         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        //         faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+        //     });
+        // });
+
+        this.input.keyboard.on("keydown-SPACE", () => {
+            this.sys.dialogs.toggleWindow();
         });
+
+        this.sys.dialogs.init();
+        this.sys.dialogs.setText("Welcome to IIIT Hyderabad Campus!");
     }
     // }}}
 
@@ -252,6 +263,9 @@ const config = {
         arcade: {
             gravity: { y: 0 }, // Top down game, so no gravity
         },
+    },
+    plugins: {
+        scene: [{ key: "dialogPlugin", plugin: DialogPlugin, mapping: "dialogs" }],
     },
 };
 // }}}
