@@ -26,10 +26,14 @@ const belowKeys = mainMap.layers
     .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
 const baseKeys = mainMap.layers
     .filter((l) => l.name === "base_layer")
-    .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
+    .map((l) => ({ name: l.name, x: 0, y: 0 }));
 
 let cursors;
 let player;
+
+// keys
+var shiftKey;
+var isSprinting = false;
 
 // canvas dimensions
 const canvasMarginWidth = 200;
@@ -46,6 +50,47 @@ class IIITCampus extends Phaser.Scene {
 
     // preload {{{
     preload() {
+        // loading screen
+        const progressLength = 320;
+        const progressHeight = 30;
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect(
+            (canvasWidth - progressLength) / 2,
+            (canvasHeight - progressHeight) / 2,
+            progressLength,
+            progressHeight
+        );
+
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        var loadingText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            text: "Felicity '22",
+            style: {
+                font: "20px monospace",
+                fill: "#ffffff",
+            },
+        });
+        loadingText.setOrigin(0.5, 0.5);
+
+        this.load.on("progress", function (value) {
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1.0);
+            progressBar.fillRect(
+                (canvasWidth - progressLength) / 2 + 10,
+                (canvasHeight - progressHeight) / 2 + 10,
+                (progressLength - 20) * value,
+                progressHeight - 20
+            );
+        });
+
+        this.load.on("complete", function () {
+            loadingText.destroy();
+        });
+
         // map
         this.load.tilemapTiledJSON("main-map", mainMap);
 
@@ -90,8 +135,7 @@ class IIITCampus extends Phaser.Scene {
         // By default, everything gets depth sorted on the screen in the order we created things.
         // Here, we want the "Above Player" layer to sit on top of the player, so we explicitly give
         // it a depth. Higher depths will sit on top of lower depth objects.
-        aboveKeys.forEach((l) => layers[l.name].setDepth(10));
-        belowKeys.forEach((l) => layers[l.name].setDepth(0));
+        aboveKeys.forEach((l) => layers[l.name].setDepth(20));
 
         // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
         // collision shapes. In the tmx file, there's an object layer with a point named "Spawn
@@ -110,7 +154,6 @@ class IIITCampus extends Phaser.Scene {
 
         // Watch the player and worldLayer for collisions, for the duration of the scene:
         worldKeys.forEach((l) => {
-            // l.setCollisionByExclusion([-1]);
             this.physics.add.collider(player, layers[l.name]);
         });
 
@@ -199,33 +242,43 @@ class IIITCampus extends Phaser.Scene {
 
         this.sys.dialogs.init();
         this.sys.dialogs.setText("Welcome to IIIT Hyderabad Campus!");
+
+        // sprint key
+        shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
     }
     // }}}
 
     // update {{{
     update() {
-        const speed = 400;
+        const speed = 200;
+        const sprintMultiplier = 4;
         const prevVelocity = player.body.velocity.clone();
 
         // Stop any previous movement from the last frame
         player.body.setVelocity(0);
 
+        if (shiftKey.isDown) {
+            isSprinting = true;
+        } else {
+            isSprinting = false;
+        }
+
         // Horizontal movement
         if (cursors.left.isDown) {
-            player.body.setVelocityX(-speed);
+            player.body.setVelocityX(-speed * (isSprinting ? sprintMultiplier : 1));
         } else if (cursors.right.isDown) {
-            player.body.setVelocityX(speed);
+            player.body.setVelocityX(speed * (isSprinting ? sprintMultiplier : 1));
         }
 
         // Vertical movement
         if (cursors.up.isDown) {
-            player.body.setVelocityY(-speed);
+            player.body.setVelocityY(-speed * (isSprinting ? sprintMultiplier : 1));
         } else if (cursors.down.isDown) {
-            player.body.setVelocityY(speed);
+            player.body.setVelocityY(speed * (isSprinting ? sprintMultiplier : 1));
         }
 
         // Normalize and scale the velocity so that player can't move faster along a diagonal
-        player.body.velocity.normalize().scale(speed);
+        player.body.velocity.normalize().scale(speed * (isSprinting ? sprintMultiplier : 1));
 
         // Update the animation last and give left/right animations precedence over up/down
         // animations
