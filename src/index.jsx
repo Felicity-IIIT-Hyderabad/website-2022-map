@@ -5,7 +5,10 @@ import ReactDOM from "react-dom";
 import atlasJSON from "./assets/atlas/atlas.json";
 import atlasPNG from "./assets/atlas/atlas.png";
 import mainMap from "./assets/iiit/4_layer_gameplay_optimization/4layers.json";
+import eventBoardSprite from "./assets/iiit/4_layer_gameplay_optimization/event_board.png";
 import DialogPlugin from "./components/DialogManager.jsx";
+
+import EventsJSON from "./assets/content/events.json";
 
 import App from "./components/App.jsx";
 
@@ -14,7 +17,7 @@ const tilesetKeys = ["hover", "world", "below", "base"];
 
 const mapScale = 2;
 
-// layer keys
+// layer keys {{{
 const aboveKeys = mainMap.layers
     .filter((l) => l.name === "hover_layer")
     .map((l) => ({ name: l.name, x: l.offsetx, y: l.offsety }));
@@ -27,6 +30,7 @@ const belowKeys = mainMap.layers
 const baseKeys = mainMap.layers
     .filter((l) => l.name === "base_layer")
     .map((l) => ({ name: l.name, x: 0, y: 0 }));
+// }}}
 
 let cursors;
 let player;
@@ -35,11 +39,12 @@ let player;
 var shiftKey;
 var isSprinting = false;
 
-// canvas dimensions
+// canvas dimensions {{{
 const canvasMarginWidth = 200;
 const canvasMarginHeight = 150;
 const canvasWidth = window.innerWidth * window.devicePixelRatio - canvasMarginWidth;
 const canvasHeight = window.innerHeight * window.devicePixelRatio - canvasMarginHeight;
+// }}}
 
 class IIITCampus extends Phaser.Scene {
     // constructor {{{
@@ -103,6 +108,9 @@ class IIITCampus extends Phaser.Scene {
 
         // atlas (for player sprite)
         this.load.atlas("atlas", atlasPNG, atlasJSON);
+
+        // event board sprites
+        this.load.image("event-board", eventBoardSprite);
     }
     // }}}
 
@@ -159,8 +167,7 @@ class IIITCampus extends Phaser.Scene {
             this.physics.add.collider(player, layers[l.name]);
         });
 
-        // Create the player's walking animations from the texture atlas. These are stored in the
-        // global animation manager so any sprite can access them.
+        // player sprite animations {{{
         const anims = this.anims;
         anims.create({
             key: "player-left-walk",
@@ -206,6 +213,7 @@ class IIITCampus extends Phaser.Scene {
             frameRate: 10,
             repeat: -1,
         });
+        // }}}
 
         const camera = this.cameras.main;
         camera.startFollow(player);
@@ -247,6 +255,29 @@ class IIITCampus extends Phaser.Scene {
 
         // sprint key
         shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+
+        // event objects
+        const eventBoards = map.createFromObjects("event_layer", {
+            key: "event-board",
+        });
+
+        eventBoards.forEach((board) => {
+            // scale up
+            board.setPosition(board.x * mapScale, board.y * mapScale);
+            board.setSize(board.width * mapScale, board.height * mapScale);
+            board.setDisplaySize(board.width, board.height);
+
+            // trigger dialog on collision
+            this.physics.world.enable(board);
+            board.body.immovable = true;
+            this.physics.add.collider(player, board, (_, event) => {
+                console.log(EventsJSON[event.name]);
+
+                this.sys.dialogs.setText(
+                    EventsJSON[event.name].map((e) => `${e.title}\n${e.description}`).join("\n")
+                );
+            });
+        });
     }
     // }}}
 
