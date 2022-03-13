@@ -274,7 +274,9 @@ class IIITCampus extends Phaser.Scene {
             board.body.immovable = true;
             this.physics.add.collider(player, board, (_, event) => {
                 this.sys.dialogs.setText(
-                    EventsJSON[event.name].map((e) => `[${e.title}]\n${e.description}`).join("\n")
+                    `[ ${EventsJSON[event.name]?.title || ""} ]\n\n${
+                        EventsJSON[event.name]?.description || ""
+                    }`
                 );
             });
         });
