@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 import atlasJSON from "./assets/atlas/atlas.json";
 import atlasPNG from "./assets/atlas/atlas.png";
 import mainMap from "./assets/iiit/4_layer_gameplay_optimization/4layers.json";
-import eventBoardSprite from "./assets/iiit/4_layer_gameplay_optimization/event_board.png";
+import eventBoardSprite from "./assets/iiit/4_layer_gameplay_optimization/event_board_large.png";
 import DialogPlugin from "./components/DialogManager.jsx";
 
 import EventsJSON from "./assets/content/events.json";
@@ -232,19 +232,21 @@ class IIITCampus extends Phaser.Scene {
         //     .setScrollFactor(0)
         //     .setDepth(30);
 
-        // // Debug graphics
-        // this.input.keyboard.once("keydown-D", () => {
-        //     // Turn on physics debugging to show player's hitbox
-        //     this.physics.world.createDebugGraphic();
+        // Debug graphics
+        this.input.keyboard.once("keydown-D", () => {
+            // Turn on physics debugging to show player's hitbox
+            this.physics.world.createDebugGraphic();
 
-        //     // Create worldLayer collision graphic above the player, but below the help text
-        //     const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-        //     worldLayer.renderDebug(graphics, {
-        //         tileColor: null, // Color of non-colliding tiles
-        //         collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-        //         faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-        //     });
-        // });
+            // Create worldLayer collision graphic above the player, but below the help text
+            const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
+            worldKeys.forEach((l) => {
+                layers[l.name].renderDebug(graphics, {
+                    tileColor: null, // Color of non-colliding tiles
+                    collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+                    faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+                });
+            });
+        });
 
         this.input.keyboard.on("keydown-SPACE", () => {
             this.sys.dialogs.toggleWindow();
