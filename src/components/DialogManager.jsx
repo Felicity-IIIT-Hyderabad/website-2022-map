@@ -20,7 +20,7 @@ export default class DialogPlugin extends Phaser.Plugins.ScenePlugin {
         this.windowColor = opts.windowColor || 0x303030;
         this.windowHeight = opts.windowHeight || 150;
         this.padding = opts.padding || 64;
-        this.dialogSpeed = opts.dialogSpeed || 3;
+        this.dialogSpeed = opts.dialogSpeed || 10;
         // used for animating the text
         this.eventCounter = 0;
         // if the dialog window is shown
