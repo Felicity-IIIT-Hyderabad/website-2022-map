@@ -248,12 +248,10 @@ class IIITCampus extends Phaser.Scene {
             });
         });
 
-        this.input.keyboard.on("keydown-SPACE", () => {
-            this.sys.dialogs.toggleWindow();
-        });
-
         this.sys.dialogs.init();
-        this.sys.dialogs.setText("Welcome to IIIT Hyderabad Campus!");
+        this.sys.dialogs.setText(
+            'Welcome to IIIT Hyderabad Campus! Use arrow keys to walk around. If you are in a hurry, you can use <Shift> key to sprint. Walk near a information board with a "!" sign to know more about that location! '
+        );
 
         // sprint key
         shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
