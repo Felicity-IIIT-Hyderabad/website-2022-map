@@ -11,7 +11,7 @@ import EventsJSON from "./assets/content/events.json";
 // tilesets used
 const tilesetKeys = ["hover", "world", "below", "base", "tweaks", "more_tweaks"];
 
-const mapScale = 2;
+const mapScale = 3;
 
 // layer keys {{{
 const aboveKeys = mainMap.layers
