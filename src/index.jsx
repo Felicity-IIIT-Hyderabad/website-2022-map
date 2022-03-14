@@ -221,32 +221,21 @@ class IIITCampus extends Phaser.Scene {
 
         cursors = this.input.keyboard.createCursorKeys();
 
-        // Help text that has a "fixed" position on the screen
-        // this.add
-        //     .text(16, 16, "Use Arrow keys to move", {
-        //         font: "18px monospace",
-        //         fill: "#000000",
-        //         padding: { x: 20, y: 10 },
-        //         backgroundColor: "#ffffff",
-        //     })
-        //     .setScrollFactor(0)
-        //     .setDepth(30);
+        // // Debug graphics
+        // this.input.keyboard.once("keydown-D", () => {
+        //     // Turn on physics debugging to show player's hitbox
+        //     this.physics.world.createDebugGraphic();
 
-        // Debug graphics
-        this.input.keyboard.once("keydown-D", () => {
-            // Turn on physics debugging to show player's hitbox
-            this.physics.world.createDebugGraphic();
-
-            // Create worldLayer collision graphic above the player, but below the help text
-            const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
-            worldKeys.forEach((l) => {
-                layers[l.name].renderDebug(graphics, {
-                    tileColor: null, // Color of non-colliding tiles
-                    collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-                    faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
-                });
-            });
-        });
+        //     // Create worldLayer collision graphic above the player, but below the help text
+        //     const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
+        //     worldKeys.forEach((l) => {
+        //         layers[l.name].renderDebug(graphics, {
+        //             tileColor: null, // Color of non-colliding tiles
+        //             collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+        //             faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Color of colliding face edges
+        //         });
+        //     });
+        // });
 
         this.sys.dialogs.init();
         this.sys.dialogs.setText(
@@ -284,7 +273,7 @@ class IIITCampus extends Phaser.Scene {
     // update {{{
     update() {
         const speed = 200;
-        const sprintMultiplier = 4;
+        const sprintMultiplier = 2;
         const prevVelocity = player.body.velocity.clone();
 
         // Stop any previous movement from the last frame
