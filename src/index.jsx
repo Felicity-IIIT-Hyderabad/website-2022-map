@@ -40,10 +40,8 @@ var shiftKey;
 var isSprinting = false;
 
 // canvas dimensions {{{
-const canvasMarginWidth = 200;
-const canvasMarginHeight = 150;
-const canvasWidth = window.innerWidth * window.devicePixelRatio - canvasMarginWidth;
-const canvasHeight = window.innerHeight * window.devicePixelRatio - canvasMarginHeight;
+const canvasWidth = window.innerWidth * window.devicePixelRatio;
+const canvasHeight = window.innerHeight * window.devicePixelRatio;
 // }}}
 
 class IIITCampus extends Phaser.Scene {
@@ -414,6 +412,9 @@ const config = {
     pixelArt: true,
     width: canvasWidth,
     height: canvasHeight,
+    scale: {
+        mode: Phaser.Scale.FIT,
+    },
     scene: IIITCampus,
     physics: {
         default: "arcade",
