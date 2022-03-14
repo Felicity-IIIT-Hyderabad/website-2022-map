@@ -1,6 +1,4 @@
 import Phaser from "phaser";
-import React from "react";
-import ReactDOM from "react-dom";
 
 import atlasJSON from "./assets/atlas/atlas.json";
 import atlasPNG from "./assets/atlas/atlas.png";
@@ -9,8 +7,6 @@ import eventBoardSprite from "./assets/iiit/4_layer_gameplay_optimization/event_
 import DialogPlugin from "./components/DialogManager.jsx";
 
 import EventsJSON from "./assets/content/events.json";
-
-import App from "./components/App.jsx";
 
 // tilesets used
 const tilesetKeys = ["hover", "world", "below", "base", "tweaks", "more_tweaks"];
@@ -429,5 +425,3 @@ const config = {
 // }}}
 
 const game = new Phaser.Game(config);
-
-ReactDOM.render(<App />, document.getElementById("root"));
