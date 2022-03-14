@@ -13,7 +13,7 @@ import EventsJSON from "./assets/content/events.json";
 import App from "./components/App.jsx";
 
 // tilesets used
-const tilesetKeys = ["hover", "world", "below", "base"];
+const tilesetKeys = ["hover", "world", "below", "base", "tweaks", "more_tweaks"];
 
 const mapScale = 2;
 
