@@ -149,6 +149,7 @@ export default class DialogPlugin extends Phaser.Plugins.ScenePlugin {
                 },
             })
             .setScrollFactor(0);
+        this.text.setFontSize(20);
         this.text.setDepth(110);
     }
 
