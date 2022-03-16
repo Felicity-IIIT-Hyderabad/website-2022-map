@@ -33,6 +33,10 @@ let player;
 
 // keys
 var shiftKey;
+var w_key;
+var a_key;
+var s_key;
+var d_key;
 var isSprinting = false;
 
 // canvas dimensions {{{
@@ -239,6 +243,12 @@ class IIITCampus extends Phaser.Scene {
         // sprint key
         shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
+        //wasd support
+        w_key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        a_key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        s_key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        d_key = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
         // event objects
         const eventBoards = map.createFromObjects("event_layer", {
             key: "event-board",
@@ -362,16 +372,16 @@ class IIITCampus extends Phaser.Scene {
         }
 
         // Horizontal movement
-        if (cursors.left.isDown) {
+        if (cursors.left.isDown|| a_key.isDown) {
             player.body.setVelocityX(-speed * (isSprinting ? sprintMultiplier : 1));
-        } else if (cursors.right.isDown) {
+        } else if (cursors.right.isDown || d_key.isDown) {
             player.body.setVelocityX(speed * (isSprinting ? sprintMultiplier : 1));
         }
 
         // Vertical movement
-        if (cursors.up.isDown) {
+        if (cursors.up.isDown || w_key.isDown) {
             player.body.setVelocityY(-speed * (isSprinting ? sprintMultiplier : 1));
-        } else if (cursors.down.isDown) {
+        } else if (cursors.down.isDown || s_key.isDown) {
             player.body.setVelocityY(speed * (isSprinting ? sprintMultiplier : 1));
         }
 
