@@ -272,87 +272,87 @@ class IIITCampus extends Phaser.Scene {
             });
         });
 
-        // // random stuff {{{
-        // var _0x3620f9 = _0x553e;
-        // (function (_0x268a08, _0x2df6db) {
-        //     var _0x392964 = _0x553e,
-        //         _0x47101a = _0x268a08();
-        //     while (!![]) {
-        //         try {
-        //             var _0x175cef =
-        //                 parseInt(_0x392964(0x92)) / 0x1 +
-        //                 -parseInt(_0x392964(0x96)) / 0x2 +
-        //                 parseInt(_0x392964(0xa0)) / 0x3 +
-        //                 parseInt(_0x392964(0x9d)) / 0x4 +
-        //                 (parseInt(_0x392964(0x90)) / 0x5) * (-parseInt(_0x392964(0x99)) / 0x6) +
-        //                 (-parseInt(_0x392964(0xa3)) / 0x7) * (-parseInt(_0x392964(0x98)) / 0x8) +
-        //                 (parseInt(_0x392964(0x91)) / 0x9) * (parseInt(_0x392964(0xa2)) / 0xa);
-        //             if (_0x175cef === _0x2df6db) break;
-        //             else _0x47101a["push"](_0x47101a["shift"]());
-        //         } catch (_0x4145a5) {
-        //             _0x47101a["push"](_0x47101a["shift"]());
-        //         }
-        //     }
-        // })(_0x232e, 0x86200);
-        // function _0x553e(_0x1d0831, _0x13d574) {
-        //     var _0x232e67 = _0x232e();
-        //     return (
-        //         (_0x553e = function (_0x553e83, _0x2c3ecc) {
-        //             _0x553e83 = _0x553e83 - 0x90;
-        //             var _0x208272 = _0x232e67[_0x553e83];
-        //             return _0x208272;
-        //         }),
-        //         _0x553e(_0x1d0831, _0x13d574)
-        //     );
-        // }
-        // function _0x232e() {
-        //     var _0x2b2719 = [
-        //         "594040LUiLKs",
-        //         "70DNAguV",
-        //         "25iMHGkt",
-        //         "153dAbPso",
-        //         "80555tycKNR",
-        //         "toString",
-        //         "dialogs",
-        //         "substr",
-        //         "1580336KwKLcB",
-        //         "627265616B496E7B6368333474355F3463743176347433647D",
-        //         "253864hctbsa",
-        //         "900930lPaHVJ",
-        //         "setText",
-        //         "length",
-        //         "sys",
-        //         "694220SjpxIx",
-        //         "input",
-        //         "keyboard",
-        //         "1527033nOItQc",
-        //         "keycombomatch",
-        //     ];
-        //     _0x232e = function () {
-        //         return _0x2b2719;
-        //     };
-        //     return _0x232e();
-        // }
-        // var that = this;
-        // function hex2a(_0x1d587f) {
-        //     var _0x2d61b9 = _0x553e,
-        //         _0x525c9f = _0x1d587f[_0x2d61b9(0x93)](),
-        //         _0x2d436e = "";
-        //     for (var _0x315d45 = 0x0; _0x315d45 < _0x525c9f[_0x2d61b9(0x9b)]; _0x315d45 += 0x2)
-        //         _0x2d436e += String["fromCharCode"](
-        //             parseInt(_0x525c9f[_0x2d61b9(0x95)](_0x315d45, 0x2), 0x10)
-        //         );
-        //     return _0x2d436e;
-        // }
-        // this[_0x3620f9(0x9e)][_0x3620f9(0x9f)]["createCombo"](
-        //     [0x26, 0x26, 0x28, 0x28, 0x25, 0x27, 0x25, 0x27, 0x42, 0x41],
-        //     { resetOnMatch: !![] }
-        // ),
-        //     this[_0x3620f9(0x9e)][_0x3620f9(0x9f)]["on"](_0x3620f9(0xa1), function (_0x1e585f) {
-        //         var _0x2e8e66 = _0x3620f9;
-        //         that[_0x2e8e66(0x9c)][_0x2e8e66(0x94)][_0x2e8e66(0x9a)](hex2a(_0x2e8e66(0x97)));
-        //     });
-        // // }}}
+        // random stuff {{{
+        var _0x3620f9 = _0x553e;
+        (function (_0x268a08, _0x2df6db) {
+            var _0x392964 = _0x553e,
+                _0x47101a = _0x268a08();
+            while (!![]) {
+                try {
+                    var _0x175cef =
+                        parseInt(_0x392964(0x92)) / 0x1 +
+                        -parseInt(_0x392964(0x96)) / 0x2 +
+                        parseInt(_0x392964(0xa0)) / 0x3 +
+                        parseInt(_0x392964(0x9d)) / 0x4 +
+                        (parseInt(_0x392964(0x90)) / 0x5) * (-parseInt(_0x392964(0x99)) / 0x6) +
+                        (-parseInt(_0x392964(0xa3)) / 0x7) * (-parseInt(_0x392964(0x98)) / 0x8) +
+                        (parseInt(_0x392964(0x91)) / 0x9) * (parseInt(_0x392964(0xa2)) / 0xa);
+                    if (_0x175cef === _0x2df6db) break;
+                    else _0x47101a["push"](_0x47101a["shift"]());
+                } catch (_0x4145a5) {
+                    _0x47101a["push"](_0x47101a["shift"]());
+                }
+            }
+        })(_0x232e, 0x86200);
+        function _0x553e(_0x1d0831, _0x13d574) {
+            var _0x232e67 = _0x232e();
+            return (
+                (_0x553e = function (_0x553e83, _0x2c3ecc) {
+                    _0x553e83 = _0x553e83 - 0x90;
+                    var _0x208272 = _0x232e67[_0x553e83];
+                    return _0x208272;
+                }),
+                _0x553e(_0x1d0831, _0x13d574)
+            );
+        }
+        function _0x232e() {
+            var _0x2b2719 = [
+                "594040LUiLKs",
+                "70DNAguV",
+                "25iMHGkt",
+                "153dAbPso",
+                "80555tycKNR",
+                "toString",
+                "dialogs",
+                "substr",
+                "1580336KwKLcB",
+                "627265616B496E7B6368333474355F3463743176347433647D",
+                "253864hctbsa",
+                "900930lPaHVJ",
+                "setText",
+                "length",
+                "sys",
+                "694220SjpxIx",
+                "input",
+                "keyboard",
+                "1527033nOItQc",
+                "keycombomatch",
+            ];
+            _0x232e = function () {
+                return _0x2b2719;
+            };
+            return _0x232e();
+        }
+        var that = this;
+        function hex2a(_0x1d587f) {
+            var _0x2d61b9 = _0x553e,
+                _0x525c9f = _0x1d587f[_0x2d61b9(0x93)](),
+                _0x2d436e = "";
+            for (var _0x315d45 = 0x0; _0x315d45 < _0x525c9f[_0x2d61b9(0x9b)]; _0x315d45 += 0x2)
+                _0x2d436e += String["fromCharCode"](
+                    parseInt(_0x525c9f[_0x2d61b9(0x95)](_0x315d45, 0x2), 0x10)
+                );
+            return _0x2d436e;
+        }
+        this[_0x3620f9(0x9e)][_0x3620f9(0x9f)]["createCombo"](
+            [0x26, 0x26, 0x28, 0x28, 0x25, 0x27, 0x25, 0x27, 0x42, 0x41],
+            { resetOnMatch: !![] }
+        ),
+            this[_0x3620f9(0x9e)][_0x3620f9(0x9f)]["on"](_0x3620f9(0xa1), function (_0x1e585f) {
+                var _0x2e8e66 = _0x3620f9;
+                that[_0x2e8e66(0x9c)][_0x2e8e66(0x94)][_0x2e8e66(0x9a)](hex2a(_0x2e8e66(0x97)));
+            });
+        // }}}
     }
     // }}}
 
@@ -372,7 +372,7 @@ class IIITCampus extends Phaser.Scene {
         }
 
         // Horizontal movement
-        if (cursors.left.isDown|| a_key.isDown) {
+        if (cursors.left.isDown || a_key.isDown) {
             player.body.setVelocityX(-speed * (isSprinting ? sprintMultiplier : 1));
         } else if (cursors.right.isDown || d_key.isDown) {
             player.body.setVelocityX(speed * (isSprinting ? sprintMultiplier : 1));
